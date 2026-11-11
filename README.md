@@ -19,37 +19,43 @@ You can access and use the full application immediately in your browser via the 
 
 ---
 
-### B. Running as a Local Desktop App on Windows 10 / Windows 11
+### B. Running as a Local Desktop App on Windows 10 / Windows 11 (feature/electron-local-engine)
 
-To install and run **Local Video Studio** directly on your Windows PC with offline local processing:
+To run **Local Video Studio** directly on your Windows PC with native local processing:
 
 #### Prerequisites
-1. **Node.js LTS** (v18 or higher): [nodejs.org](https://nodejs.org)
-2. **FFmpeg & FFprobe**: Installed and added to your Windows PATH.
-   - Verify by opening Command Prompt / PowerShell:
+1. **Node.js LTS** (v18 or v20+): [nodejs.org](https://nodejs.org)
+2. **FFmpeg & FFprobe**:
+   - If not installed, open Windows PowerShell (Run as Administrator) and run:
+     ```powershell
+     winget install Gyan.FFmpeg
+     ```
+     *(or download from ffmpeg.org and add `bin` folder to your Windows PATH).*
+   - Verify:
      ```bash
      ffmpeg -version
      ffprobe -version
      ```
 
-#### Local Installation Steps
-1. **Clone or Download the Repository**:
-   ```bash
-   git clone <your-repo-url> LocalVideoStudio
-   cd LocalVideoStudio
-   ```
-2. **Install Dependencies**:
-   ```bash
-   npm install
-   ```
-3. **Launch the Local Development Server**:
-   ```bash
-   npm run dev
-   ```
-   Open your browser at `http://localhost:3000`.
+#### Local Installation & Run
+```bash
+# 1. Open terminal in the project folder
+cd LocalVideoStudio
 
-4. **Electron Desktop Wrapper (Optional)**:
-   - For a native `.exe` window, configure Electron using the provided `main.js` and `preload.js` templates located in the in-app **Settings** tab.
+# 2. Install all dependencies
+npm install
+
+# 3. Option A: Run Full-Stack Local Server (Browser UI on port 3000 with local FFmpeg engine)
+npm run dev
+
+# 4. Option B: Run Native Windows Electron Desktop App
+npm run electron:dev
+```
+
+#### Why "Not Working Local" & How to Fix:
+1. **Port 3000 in use**: If another process is using port 3000, kill it or change `PORT=3001 npm run dev`.
+2. **FFmpeg not in PATH**: The app will automatically run in high-fidelity browser canvas mode if `ffmpeg.exe` is missing. To enable native hardware encoding (NVENC), install FFmpeg via `winget install Gyan.FFmpeg` and restart your terminal.
+3. **Electron dependencies**: Run `npm install -D electron` if running Electron on your local computer.
 
 ---
 

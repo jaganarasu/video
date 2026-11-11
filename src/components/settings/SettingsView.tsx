@@ -231,6 +231,38 @@ app.whenReady().then(createWindow);`;
           {electronMainJs}
         </pre>
       </div>
+
+      {/* Feature: electron-local-engine Configuration */}
+      <div className="bg-slate-900/90 border border-blue-500/40 rounded-xl p-5 space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-sm font-semibold text-white">
+            <span className="w-2.5 h-2.5 rounded-full bg-blue-500" />
+            <span>Branch / Feature: electron-local-engine</span>
+          </div>
+          <span className="text-[11px] font-mono text-blue-400 bg-blue-950 px-2 py-0.5 rounded border border-blue-800">
+            Node.js + Electron + FFmpeg
+          </span>
+        </div>
+
+        <p className="text-xs text-slate-300">
+          The local processing engine runs natively on Windows 10/11 using Electron child processes and Express backend routes. If running locally, execute:
+        </p>
+
+        <div className="space-y-2 text-xs font-mono">
+          <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-800 flex items-center justify-between text-blue-300">
+            <span>npm install</span>
+            <span className="text-slate-500 text-[10px]"># 1. Install all dependencies</span>
+          </div>
+          <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-800 flex items-center justify-between text-emerald-300">
+            <span>npm run dev</span>
+            <span className="text-slate-500 text-[10px]"># 2. Starts Full-Stack local FFmpeg server on port 3000</span>
+          </div>
+          <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-800 flex items-center justify-between text-purple-300">
+            <span>npm run electron:dev</span>
+            <span className="text-slate-500 text-[10px]"># 3. Launches native Windows desktop application</span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

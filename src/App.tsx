@@ -25,6 +25,8 @@ import { BatchExportView } from './components/export/BatchExportView';
 import { SettingsView } from './components/settings/SettingsView';
 import { NewProjectModal } from './components/modals/NewProjectModal';
 import { FFmpegCommandModal } from './components/modals/FFmpegCommandModal';
+import { LocalEngineModal } from './components/modals/LocalEngineModal';
+import { LocalEngineService, EngineDiagnostics } from './services/localEngineService';
 import { formatBytes } from './utils/timeFormat';
 
 export default function App() {
@@ -34,9 +36,13 @@ export default function App() {
   const [library, setLibrary] = useState<VideoSource[]>(loadVideoLibrary);
   const [exportJobs, setExportJobs] = useState<ExportJob[]>(loadExportJobs);
 
+  // Engine Diagnostics State
+  const [diagnostics, setDiagnostics] = useState<EngineDiagnostics | null>(null);
+
   // Modals
   const [isNewProjectModalOpen, setIsNewProjectModalOpen] = useState(false);
   const [isFFmpegModalOpen, setIsFFmpegModalOpen] = useState(false);
+  const [isEngineModalOpen, setIsEngineModalOpen] = useState(false);
 
   // Toast Notification
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -45,6 +51,13 @@ export default function App() {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3000);
   };
+
+  // Detect local engine on mount
+  useEffect(() => {
+    LocalEngineService.getInstance().detectEngine().then((diag) => {
+      setDiagnostics(diag);
+    });
+  }, []);
 
   // Auto-save project whenever it changes
   useEffect(() => {
@@ -292,6 +305,8 @@ export default function App() {
         onShowFFmpegModal={() => setIsFFmpegModalOpen(true)}
         onQuickExport={handleTriggerExport}
         exportQueueCount={exportJobs.filter((j) => j.status === 'pending' || j.status === 'processing').length}
+        diagnostics={diagnostics}
+        onOpenEngineModal={() => setIsEngineModalOpen(true)}
       />
 
       {/* Main Content Body */}
@@ -372,6 +387,16 @@ export default function App() {
         isOpen={isFFmpegModalOpen}
         onClose={() => setIsFFmpegModalOpen(false)}
         project={project}
+      />
+
+      <LocalEngineModal
+        isOpen={isEngineModalOpen}
+        onClose={() => setIsEngineModalOpen(false)}
+        diagnostics={diagnostics}
+        onRecheck={async () => {
+          const diag = await LocalEngineService.getInstance().detectEngine();
+          setDiagnostics(diag);
+        }}
       />
     </div>
   );

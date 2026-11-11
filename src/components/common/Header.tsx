@@ -11,6 +11,7 @@ import {
   Download,
 } from 'lucide-react';
 import { ActiveTab, ProjectData } from '../../types';
+import { EngineDiagnostics } from '../../services/localEngineService';
 
 interface HeaderProps {
   activeTab: ActiveTab;
@@ -20,6 +21,8 @@ interface HeaderProps {
   onShowFFmpegModal: () => void;
   onQuickExport: () => void;
   exportQueueCount: number;
+  diagnostics?: EngineDiagnostics | null;
+  onOpenEngineModal?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -30,6 +33,8 @@ export const Header: React.FC<HeaderProps> = ({
   onShowFFmpegModal,
   onQuickExport,
   exportQueueCount,
+  diagnostics,
+  onOpenEngineModal,
 }) => {
   return (
     <header className="h-13 bg-[#0d121d] border-b border-slate-800 flex items-center justify-between px-4 select-none shrink-0 z-30">
@@ -120,10 +125,34 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* Right: Actions and Local Engine Indicators */}
       <div className="flex items-center gap-2.5">
-        <div className="hidden lg:flex items-center gap-2 px-2.5 py-1 rounded bg-slate-900 border border-slate-800 text-[11px] text-slate-400">
-          <HardDrive className="w-3 h-3 text-slate-500" />
-          <span>Local Engine: <strong className="text-slate-200 font-normal">D:\LocalVideoStudio</strong></span>
-        </div>
+        <button
+          onClick={onOpenEngineModal}
+          title="Click to view Local Engine Diagnostics & Setup Guide"
+          className={`flex items-center gap-2 px-2.5 py-1 rounded text-[11px] font-mono border transition-colors ${
+            diagnostics?.isElectron
+              ? 'bg-emerald-950/80 border-emerald-700 text-emerald-300'
+              : diagnostics?.isLocalServer
+              ? 'bg-blue-950/80 border-blue-700 text-blue-300'
+              : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700'
+          }`}
+        >
+          <span
+            className={`w-2 h-2 rounded-full ${
+              diagnostics?.isElectron
+                ? 'bg-emerald-400'
+                : diagnostics?.isLocalServer
+                ? 'bg-blue-400'
+                : 'bg-purple-400'
+            }`}
+          />
+          <span>
+            {diagnostics?.isElectron
+              ? 'Electron Native'
+              : diagnostics?.isLocalServer
+              ? 'Local Node + FFmpeg'
+              : 'Local Engine: Ready'}
+          </span>
+        </button>
 
         <button
           onClick={onShowFFmpegModal}
