@@ -1,0 +1,6 @@
+{
+  "name": "Local Video Studio",
+  "description": "Desktop-grade local video editing and clipping suite for YouTube, Shorts, and Reels with multi-track timeline, auto aspect ratio cropping, manual & AI zoom framing, and Tamil/multilingual subtitles.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
